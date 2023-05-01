@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contas do Mês</title>
 </head>
+
 <body>
     <header>
         <h1>Contas do Mês</h1>
@@ -14,81 +16,92 @@
     <main>
         <form action="#" method="get">
             <p>
-                <fieldset>
-                    <legend>Alex</legend>
-    
-                    <p>
-                        <label for="imes">Mês:</label>
-                        <input type="text" name="imes" id="imes" value="Maio">
-                    </p>
-    
-                    <p>
-                        <label for="isalario">Salário líquido:</label>
-                        <input type="number" name="isalario" id="salario" value="2623">
-                    </p>
-                    
-                    <p>
-                        <label for="icartao">Cartão iniciado em:</label>
-                        <input type="number" name="icartao" id="cartao" value="997">
-                    </p>
-    
-                    <p>
-                        <label for="icartao">Saldo:</label>
-                        <input type="text" name="isaldo" id="resultado">
-                    </p>
-    
-                    <p>
-                        <input type="button" value="Calcular" onclick="subtrair()">
-                    </p>
-    
-                    <p><textarea name="" id="historico" cols="30" rows="10"></textarea></p>
-                </fieldset>
+            <fieldset>
+                <legend>Alex</legend>
+
+                <p>
+                    <label for="imes">Mês:</label>
+                    <input type="text" name="imes" id="imes" value="Maio">
+                </p>
+
+                <p>
+                    <label for="isalario">Salário líquido:</label>
+                    <input type="number" name="isalario" id="salario" value="2623">
+                </p>
+
+                <p>
+                    <label for="icartao">Cartão iniciado em:</label>
+                    <input type="number" name="icartao" id="cartao" value="997">
+                </p>
+
+                <p>
+                    <label for="icartao">Saldo:</label>
+                    <input type="text" name="isaldo" id="resultado">
+                </p>
+
+                <p>
+                    <input type="button" value="Calcular" onclick="subtrair()">
+                    <input type="button" value="Salvar" onclick="salvarDados()">
+                    <input type="button" value="Recuperar" onclick="recuperarDados()">
+                </p>
+
+                <p><textarea name="" id="historico" cols="30" rows="10"></textarea></p>
+            </fieldset>
             </p>
-    
+
         </form>
     </main>
-    
+
     <footer>
-    
+
     </footer>
-    
+
     <script>
         const salarioInput = document.getElementById("salario");
         const cartaoInput = document.getElementById("cartao");
         const resultadoInput = document.getElementById("resultado");
         const historicoTextArea = document.getElementById("historico");
-    
+
         // Recupera os dados salvos no localStorage, se houver
         let dadosSalvos = localStorage.getItem("dados") ?? "{}";
         dadosSalvos = JSON.parse(dadosSalvos);
-    
+
         // Preenche os campos com os dados salvos, se houver
         if (dadosSalvos.salario) salarioInput.value = dadosSalvos.salario;
         if (dadosSalvos.cartao) cartaoInput.value = dadosSalvos.cartao;
-    
+
         function subtrair() {
             const salario = parseFloat(salarioInput.value);
             const cartao = parseFloat(cartaoInput.value);
-    
+
             const resultado = salario - cartao;
             resultadoInput.value = resultado.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    
+
             // Adiciona o resultado ao histórico e salva no localStorage
             const historico = `${new Date().toLocaleString()} - Salário líquido: ${salario.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - Cartão iniciado em: ${cartao.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - Saldo: ${resultado.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}\n\n`;
-    
+
             historicoTextArea.value += historico;
-    
+
             dadosSalvos.salario = salario;
             dadosSalvos.cartao = cartao;
+        }
+
+        function salvarDados() {
             localStorage.setItem("dados", JSON.stringify(dadosSalvos));
+            alert("Dados salvos!");
+        }
+
+        function recuperarDados() {
+            const dadosRecuperados = JSON.parse(localStorage.getItem("dados")) ?? {};
+
+            if (dadosRecuperados.salario) salarioInput.value = dadosRecuperados.salario;
+            if (dadosRecuperados.cartao) cartaoInput.value = dadosRecuperados.cartao;
+
+            dadosSalvos = dadosRecuperados;
+
+            alert("Dados recuperados!");
         }
     </script>
-    
-
-    <footer>
-
-    </footer>
-
-    <script src="script.js"></script>
 </body>
+
 </html>
